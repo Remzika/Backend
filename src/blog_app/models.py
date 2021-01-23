@@ -12,7 +12,11 @@ class Post(models.Model):
     update_date = models.DateTimeField(auto_now=True)
     image = models.URLField(max_length=400, default='https://unsplash.com/photos/xgP_opYfHEg')
     author = models.ForeignKey(User, on_delete = models.CASCADE)
-    status = models.CharField(max_length=10, choices = OPTIONS, default='d')  
+    status = models.CharField(max_length=10, choices = OPTIONS, default='d') 
+    slug = models.SlugField(blank=True, unique=True)
+
+    class Meta:
+        ordering = ['-publish_date']
 
     def __str__(self):
         return self.title
@@ -34,6 +38,9 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     content = models.TextField()
     time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-time']
     
     def __str__(self):
         return self.user.username
